@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        ul {
+            padding: 0px;
+
+        }
+
+        li {
+            border: solid black 1px;
+        }
+
+        ul li {
+            display: inline-block;
+            border: solid black 1px;
+
+        }
+
+        #list {
+            border: black solid;
+            height: 300px;
+            overflow: auto;
+        }
+
+        #list li {
+            border: 1px black solid;
+            display: block;
+            margin: 0px;
+        }
+
+        i {
+            background-color: aqua;
+        }
+
+        /* modal - 팝업존 */
+        .modal {
+            width: 500px;
+            height: 700px;
+            /* 영역설정 */
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10000;
+            overflow: auto;
+            /* modalBg 위에 보이도록 지정 */
+            /* 가운데 오게 하는 위치는 제이쿼리에서 처리 */
+        }
+
+        .modalBg {
+            width: 100%;
+            height: 100%;
+            /* 화면을 가득차게 영역설정 */
+            background-color: rgba(172, 208, 238, 0.7);
+            /* 뒤가 보이도록 투명도 조절 */
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 9999;
+            /* 메인 디자인 위에 고정 및 위에 보이도록 지정 */
+            box-sizing: border-box;
+            /* 여백인사이드처리 */
+        }
+
+        .modal p {
+            width: 100%;
+            height: 30px;
+            /* 영역설정 */
+            text-align: right;
+            /* a태그 오른쪽 정렬 */
+            box-sizing: border-box;
+            /* 여백인사이드처리 */
+            line-height: 30px;
+            /* 줄간격을 높이와 같게 처리해서 세로 가운데 정렬 */
+            padding-right: 10px;
+            background-color: #000000;
+        }
+
+        .modal a {
+            color: #FFFFFF;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- <script src="js/vex.combined.min.js"></script>
+    <script>vex.defaultOptions.className = 'vex-theme-flat-attack'</script>
+    <link rel="stylesheet" href="css/vex.css" />
+    <link rel="stylesheet" href="css/vex-theme-flat-attack.css" /> -->
+
+    <script>
+        window.onload = () => {
+
+            document.getElementById('all').onclick = () => {
+                $.ajax({
+                    method: "GET", // 요청 방식
+                    url: "/ajax/" + "0/" + "0", // 요청 URL
+                    success: function (data) { // 성공 시 호출 콜백
+                        $('#list').empty();
+                        for (var i = 0; i < data.length; i++) {
+                            var tag = `<li>${data[i].name}, ${data[i].code}, ${data[i].grade}, 
+                            ${data[i].pro}, ${data[i].time} </li><i id="i${i}">강의평가</i>`;
+                            var $li = (`${tag}`);
+                            $('#list').append($li);//jQuery 문법
+
+                        }
+                        $("#list").children().click(function () {
+                            var choice = $("#list").children().index(this);
+                            document.getElementsByTagName('li')[choice].onclick = () => { alert(`${choice}`); };
+                            document.getElementsByTagName('i')[choice].onclick = () => { alert(`${choice}`); };
+                        });
+                    },
+                    error: function (data) {
+                        console.log("data.statusText");
+                    },
+                    complete: function () {
+                        console.log('compelted');
+                    }
+                });
+            }
+            document.getElementById('nameBtn').onclick = () => {
+                if (document.getElementById('name').value == "") {
+                    alert("내용을 입력해 주세요");
+                    console.log(document.getElementById('name').value);
+                } else {
+                    console.log(typeof (document.getElementById('name').value));
+                    console.log("여기?");
+                    $.ajax({
+                        method: "GET", // 요청 방식
+                        url: "/ajax/" + "1/" + document.getElementById('name').value, // 요청 URL
+
+                        success: function (data) { // 성공 시 호출 콜백
+                            $('#list').empty();
+                            for (var i = 0; i < data.length; i++) {
+                                var tag = `<li>${data[i].name}, ${data[i].code}, ${data[i].grade}, 
+                            ${data[i].pro}, ${data[i].time} <i id="i${i}">강의평가</i></li> `;
+                                var $li = (`${tag}`);
+                                $('#list').append($li);//jQuery 문법
+                                document.getElementsByTagName('li')[i].onclick = () => { alert(`${i}`); };
+                                document.getElementsByTagName('i')[i].onclick = () => { alert(`${i}`); };
+                            }
+                        },
+                        error: function (data) {
+                            console.log("data.statusText");
+                        },
+                        complete: function () {
+                            console.log(document.getElementById('name').value);
+                            console.log('compelted');
+                        }
+                    });
+                }
+
+            }
+            document.getElementById('codeBtn').onclick = () => {
+                if (document.getElementById('code').value == "") {
+                    alert("내용을 입력해 주세요");
+                } else {
+                    $.ajax({
+                        method: "GET", // 요청 방식
+                        url: "/ajax/" + "2/" + document.getElementById('code').value, // 요청 URL
+                        success: function (data) { // 성공 시 호출 콜백
+                            $('#list').empty();
+                            for (var i = 0; i < data.length; i++) {
+                                var tag = `<li>${data[i].name}, ${data[i].code}, ${data[i].grade}, 
+                            ${data[i].pro}, ${data[i].time} <i id="i${i}">강의평가</i></li> `;
+                                var $li = (`${tag}`);
+                                $('#list').append($li);//jQuery 문법
+                                document.getElementsByTagName('li')[i].onclick = () => { alert(`${i}`); };
+                                document.getElementsByTagName('i')[i].onclick = () => { alert(`${i}`); };
+                            }
+                        },
+                        error: function (data) {
+                            console.log("data.statusText");
+                        },
+                        complete: function () {
+                            console.log('compelted');
+                        }
+                    });
+                }
+            }
+
+            document.getElementById('gradeBtn').onclick = () => {
+                if (document.getElementById('grade').value == "") {
+                    alert("내용을 입력해 주세요");
+                } else {
+                    $.ajax({
+                        method: "GET", // 요청 방식
+                        url: "/ajax/" + "3/" + document.getElementById('grade').value, // 요청 URL
+                        success: function (data) { // 성공 시 호출 콜백
+                            $('#list').empty();
+                            for (var i = 0; i < data.length; i++) {
+
+                                var tag = `<li>${data[i].name}, ${data[i].code}, ${data[i].grade}, 
+                            ${data[i].pro}, ${data[i].time} <i id="i${i}">강의평가</i> </li> `;
+                                var $li = (`${tag}`);
+                                $('#list').append($li);//jQuery 문법
+                                document.getElementsByTagName('li')[i].onclick = () => { alert(`${i}`); };
+                                document.getElementsByTagName('i')[i].onclick = () => { alert(`${i}`); };
+                            }
+                        },
+                        error: function (data) {
+                            console.log("data.statusText");
+                        },
+                        complete: function () {
+                            console.log('compelted');
+                        }
+                    });
+                }
+            }
+
+
+        };
+
+
+
+
+
+    </script>
+</head>
+
+<body>
+
+    <ul id='list'></ul>
+
+    <label for="contents">과목명</label>
+    <input type="text" name="name" id="name" required>
+    <input type="button" id="nameBtn" value="검색">
+    </br>
+    <label for="grade">학년별</label>
+    <input type="text" name="grade" id="grade" required>
+    <input type="button" id="gradeBtn" value="검색">
+    </br>
+    <label for="code">코드명</label>
+    <input type="text" name="code" id="code" required>
+    <input type="button" id="codeBtn" value="검색">
+    </br>
+    <input type="button" id="all" value="전체보기">
+    // 여기부터 상세조회 모달
+    <div class="modalBg">
+        <!-- 검은배경-->
+    </div>
+    <div class="modal"><a class="modalCloseBtn" style="float:right; font-size: 14px; color: red;">Close X</a>
+        <div id="detail"
+            style="height: 4%; width: 100%; background:#aab ; text-align:center; font-weight:700; font-size: 20px; color:#fff;">
+            강의평가</div>
+
+    </div>
+</body>
+
+</html>
